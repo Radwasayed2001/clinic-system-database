@@ -1,0 +1,71 @@
+Stored procedures in MySQL are named database objects that contain a series of SQL statements.
+They are stored in the database and can be called and executed later.
+Stored procedures allow you to encapsulate complex logic, reuse code, improve performance, and enhance security.
+Let's dive into the details of stored procedures in MySQL with multiple examples.
+
+1.Creating a Stored Procedure:
+To create a stored procedure, you use the CREATE PROCEDURE statement.
+Here's an example of creating a simple stored procedure named get_users that retrieves all users from the "users" table:
+
+CREATE PROCEDURE get_users()
+BEGIN
+  SELECT * FROM users;
+END;
+
+2.Executing a Stored Procedure:
+Once the stored procedure is created, you can execute it using the CALL statement.
+Here's an example of executing the get_users procedure:
+
+CALL get_users();
+
+
+3.Passing Parameters to a Stored Procedure:
+Stored procedures can accept parameters, allowing you to pass values into the procedure.
+Here's an example of creating a stored procedure named get_user_by_id that accepts an id parameter and retrieves a specific user based on the provided id:
+
+CREATE PROCEDURE get_user_by_id(IN user_id INT)
+BEGIN
+  SELECT * FROM users WHERE id = user_id;
+END;
+
+To execute the get_user_by_id procedure and pass the id parameter:
+
+CALL get_user_by_id(1);
+This will retrieve the user with an id of 1.
+
+4.Returning Values from a Stored Procedure:
+Stored procedures can return values using the OUT parameter.
+Here's an example of creating a stored procedure named get_user_count that returns the total count of users in the "users" table:
+
+CREATE PROCEDURE get_user_count(OUT count INT)
+BEGIN
+  SELECT COUNT(*) INTO count FROM users;
+END;
+
+To execute the get_user_count procedure and retrieve the user count:
+
+DECLARE @user_count INT;
+CALL get_user_count(@user_count);
+SELECT @user_count;
+
+This will assign the user count to the @user_count variable and display it.
+
+5.Conditional Logic in a Stored Procedure:
+Stored procedures can include conditional logic using IF statements.
+Here's an example of creating a stored procedure named get_users_by_age that accepts an age parameter and retrieves users based on the provided age.
+If the age is greater than 30, it retrieves users older than 30; otherwise, it retrieves users younger than or equal to 30:
+
+CREATE PROCEDURE get_users_by_age(IN user_age INT)
+BEGIN
+  IF user_age > 30 THEN
+    SELECT * FROM users WHERE age > 30;
+  ELSE
+    SELECT * FROM users WHERE age <= 30;
+  END IF;
+END;
+
+To execute the get_users_by_age procedure and pass the age parameter:
+
+CALL get_users_by_age(35);
+
+This will retrieve users older than 30.

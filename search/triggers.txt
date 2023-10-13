@@ -1,0 +1,67 @@
+Triggers in MySQL are database objects that are associated with a particular table and automatically executed in response to specific events, such as INSERT, UPDATE, or DELETE operations on that table. Triggers are useful for enforcing business rules, maintaining data integrity, and automating certain actions. Let's explore triggers in MySQL in detail with multiple examples.
+
+Creating a Trigger:
+To create a trigger, you use the CREATE TRIGGER statement.
+Here's an example of creating a trigger named update_employee_salary that automatically updates the salary column of the employees table whenever a new record is inserted:
+
+CREATE TRIGGER update_employee_salary
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+  UPDATE employees
+  SET salary = salary * 1.1
+  WHERE id = NEW.id;
+END;
+
+
+In this example, the trigger is associated with the employees table and executes after each INSERT operation. It updates the salary column by multiplying it by 1.1 for the newly inserted record.
+
+Trigger Events:
+Triggers can be associated with different events such as INSERT, UPDATE, or DELETE.
+You specify the trigger event using the AFTER or BEFORE keyword.
+Here's an example of a trigger that fires before an update operation on the employees table:
+
+CREATE TRIGGER before_update_employee
+BEFORE UPDATE ON employees
+FOR EACH ROW
+BEGIN
+  -- trigger logic goes here
+END;
+
+Referencing Old and New Values:
+Triggers have access to the old and new values of the affected row using the OLD and NEW keywords, respectively.
+OLD refers to the row before the trigger event, and NEW refers to the row after the trigger event.
+Here's an example of a trigger that logs changes to the salary column in the employees table:
+
+CREATE TRIGGER log_salary_changes
+BEFORE UPDATE ON employees
+FOR EACH ROW
+BEGIN
+  IF OLD.salary <> NEW.salary THEN
+    INSERT INTO salary_changes (employee_id, old_salary, new_salary)
+    VALUES (OLD.id, OLD.salary, NEW.salary);
+  END IF;
+END;
+
+
+In this example, the trigger fires before an update on the employees table.
+If the salary column is modified, it inserts a record into the salary_changes table, capturing the employee ID, old salary, and new salary.
+
+Disabling and Enabling Triggers:
+You can disable and enable triggers using the DISABLE TRIGGER and ENABLE TRIGGER statements.
+Here's an example of disabling and enabling a trigger named update_employee_salary:
+
+DISABLE TRIGGER update_employee_salary ON employees;
+-- perform operations without triggering the disabled trigger
+ENABLE TRIGGER update_employee_salary ON employees;
+
+Disabling a trigger allows you to perform operations on a table without triggering the associated trigger.
+Enabling the trigger restores its functionality.
+
+Dropping a Trigger:
+To remove a trigger from a table, you use the DROP TRIGGER statement.
+Here's an example of dropping a trigger named update_employee_salary:
+
+DROP TRIGGER update_employee_salary;
+
+This will remove the trigger from the table.
